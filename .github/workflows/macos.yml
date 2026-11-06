@@ -37,6 +37,9 @@ jobs:
           plutil -p build/MacSecurityAgent.app/Contents/Info.plist
           codesign -d --entitlements - build/MacSecurityAgent.app
           lipo -archs build/MacSecurityAgent.app/Contents/MacOS/MacSecurityAgent
+          # Release builds must not be debuggable and must never request audio.
+          ! codesign -d --entitlements - build/MacSecurityAgent.app 2>/dev/null | grep -q get-task-allow
+          ! codesign -d --entitlements - build/MacSecurityAgent.app 2>/dev/null | grep -q audio-input
 
       - uses: actions/upload-artifact@v4
         with:
