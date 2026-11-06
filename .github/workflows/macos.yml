@@ -1,0 +1,45 @@
+name: macOS build & test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Build package (core + menu-bar app)
+        working-directory: MacSecurityAgent
+        run: swift build --build-tests
+
+      - name: Unit & integration tests
+        working-directory: MacSecurityAgent
+        run: swift test --skip-build
+
+      - name: Build app with Xcode (Release, arm64, ad-hoc signed)
+        run: scripts/build-app.sh
+
+      - name: Build app with SwiftPM bundler
+        run: scripts/build-app-spm.sh
+
+      - name: Inspect bundle
+        run: |
+          plutil -p build/MacSecurityAgent.app/Contents/Info.plist
+          codesign -d --entitlements - build/MacSecurityAgent.app
+          lipo -archs build/MacSecurityAgent.app/Contents/MacOS/MacSecurityAgent
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MacSecurityAgent-app
+          path: build/MacSecurityAgent.zip
+          retention-days: 7
