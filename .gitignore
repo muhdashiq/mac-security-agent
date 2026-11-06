@@ -1,0 +1,8 @@
+.DS_Store
+/build/
+MacSecurityAgent/.build/
+MacSecurityAgent/.swiftpm/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+MacSecurityAgent/Package.resolved

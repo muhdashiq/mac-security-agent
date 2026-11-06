@@ -1,0 +1,16 @@
+name: Linux core tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+    container: swift:6.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test platform-independent core
+        working-directory: MacSecurityAgent
+        run: swift test

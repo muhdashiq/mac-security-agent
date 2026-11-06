@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- App Sandbox: the app can only reach its own container. -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- Camera (sandbox + hardened runtime). No audio-input entitlement:
+	     the microphone is unreachable even if code tried to use it. -->
+	<key>com.apple.security.device.camera</key>
+	<true/>
+	<!-- Outbound connections only (Telegram Bot API over HTTPS).
+	     com.apple.security.network.server is deliberately absent:
+	     the app cannot listen on any port. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+</dict>
+</plist>
